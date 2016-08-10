@@ -25,11 +25,12 @@ namespace TestProject.Framework
             catch(Exception e)
             {
                 _Data.LogFile("Unable to launch the Browser");
+                Assert.Fail;
             }
 
         }
 
-         public static void TypeIn(String _locator,String Value)
+        public static void TypeIn(String _locator,String Value)
         {
             String[] a = _locator.Split('#');
             String XPATH = a[1];
@@ -43,28 +44,47 @@ namespace TestProject.Framework
             catch(Exception e)
             {
                 _Data.LogFile("Unable to perform Type action "+Element);
+                Assert.Fail;
             }
 
         }
 
-   public static void _Select(String _locator,String Value)
+        public static void _Select(String _locator,String Value)
         {
             String[] a = _locator.Split('#');
             String XPATH = a[1];
             String Element = a[0];
             try
             {
-            dr.FindElement(By.XPath(XPATH)).Clear();
-            dr.FindElement(By.XPath(XPATH)).SendKeys(Value);
-            _Data.LogFile("Type : "+Value+" in " + Element);
+                IWebElement drp = dr.FindElement(By.XPath(XPATH));
+                new SelectElement(drp).SelectByValue(Value);
+                _Data.LogFile("Select : "+Value+" in " + Element +" dropdown");
             }
             catch(Exception e)
             {
-                _Data.LogFile("Unable to perform Type action "+Element);
+                _Data.LogFile("Unable to perform select action - "+Element);
+                Assert.Fail;
             }
-
         }
-
-
+        
+        public static void _VerifyElement(String _locator)
+        {
+            String[] a = _locator.Split('#');
+            String XPATH = a[1];
+            String Element = a[0];
+            try
+            {
+                if(dr.FindElement(By.XPath(XPATH)).Displayed)
+                {
+                    _Data.LogFile("Verified the expected Element "+ Element);
+                }
+            }
+            catch(Exception e)
+            {
+                   _Data.LogFile("Expected Element is not found - "+ Element);
+                   Assert.Fail;
+            }
+        }
+        
     }
 }
