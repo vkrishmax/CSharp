@@ -47,7 +47,23 @@ namespace TestProject.Framework
 
         }
 
+   public static void _Select(String _locator,String Value)
+        {
+            String[] a = _locator.Split('#');
+            String XPATH = a[1];
+            String Element = a[0];
+            try
+            {
+            dr.FindElement(By.XPath(XPATH)).Clear();
+            dr.FindElement(By.XPath(XPATH)).SendKeys(Value);
+            _Data.LogFile("Type : "+Value+" in " + Element);
+            }
+            catch(Exception e)
+            {
+                _Data.LogFile("Unable to perform Type action "+Element);
+            }
 
+        }
 
 
     }
