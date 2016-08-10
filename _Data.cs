@@ -15,17 +15,50 @@ namespace TestProject.Framework
         public static String DateTIME()
         {
             String val="";
-
-              CommonVariable.tt = "" + System.DateTime.Now;
-      CommonVariable.DT =  CommonVariable.tt.Split();
-         CommonVariable.DATE = CommonVariable. DT[0].ToString().Trim().Replace("/", "_");
-         CommonVariable.TIME =  CommonVariable.DT[1].ToString().Trim().Replace(":", "_") + "_" +  CommonVariable.DT[2].ToString().Trim();
-
-         val = CommonVariable.DATE + "_" + CommonVariable.TIME;
+            CommonVariable.tt = "" + System.DateTime.Now;
+            CommonVariable.DT =  CommonVariable.tt.Split();
+            CommonVariable.DATE = CommonVariable. DT[0].ToString().Trim().Replace("/", "_");
+            CommonVariable.TIME =  CommonVariable.DT[1].ToString().Trim().Replace(":", "_") + "_" +  CommonVariable.DT[2].ToString().Trim();
+            val = CommonVariable.DATE + "_" + CommonVariable.TIME;
          return val;
         }
 
-
+public static String retrieve1(String Col)
+        {
+            String rowval = null;
+            XSSFSheet sh;
+            XSSFWorkbook wb;
+            String Flag = "false";
+            string path = CommonVariable.TESTDATA.Trim() + "Data.xlsx";
+            if (File.Exists(path))
+            {
+                wb = new XSSFWorkbook(path);
+                // create sheet
+                sh = (XSSFSheet)wb.GetSheet("Sheet1");
+                // 3 rows, 2 columns
+                int r = sh.LastRowNum;
+                for (int j = 0; j <=r; j++)
+                {
+                  XSSFRow row = (XSSFRow)sh.GetRow(j);
+                  int c = row.LastCellNum;
+                    for (int i = 0; i < c; i++)
+                    {
+                        rowval = row.GetCell(i).StringCellValue.ToString();
+                        if(rowval.equal(Col))
+                        {
+                            rowval = (XSSFRow)sh.GetRow(j+1).GetCell(i).StringCellValue.ToString();
+                            break;
+                            Flag = "true";
+                        }
+                    }
+                    if(Flag.equal("true"))
+                    {
+                        break;
+                    }
+                }
+            }
+            return rowval;
+        }
 
 
         public static String retrieve(String Col)
