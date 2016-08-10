@@ -12,7 +12,7 @@ namespace TestProject.Framework
     public class _Keys
     {
         public static IWebDriver dr;
-        public static void Browserlaunch(String URL)
+        public static void _Browserlaunch(String URL)
         {
             try
             {
@@ -29,7 +29,7 @@ namespace TestProject.Framework
             
         }
 
-        public static void TypeIn(String _locator,String Value)
+        public static void _TypeIn(String _locator,String Value)
         {
             String[] a = _locator.Split('#');
             String XPATH = a[1];
@@ -84,6 +84,31 @@ namespace TestProject.Framework
                    Assert.Fail;
             }
         }
+         public static void _VerifyText(String _locator, String ExpectedText)
+        {
+            String[] a = _locator.Split('#');
+            String XPATH = a[1];
+            String Element = a[0];
+            try
+            {
+                String val = dr.FindElement(By.XPath(XPATH)).Text;
+                if(val.Trim().equal(ExpectedText))
+                {
+                    _Data.LogFile("Verified the expected Text - "+ ExpectedText);
+                }
+                else
+                {
+                    _Data.LogFile("Expected Text is not found - "+ ExpectedText);
+                   Assert.Fail;
+                }
+            }
+            catch(Exception e)
+            {
+                   _Data.LogFile("Expected Text is not found - "+ ExpectedText);
+                   Assert.Fail;
+            }
+        }
+        
         public static void _DefaultWaitTime_30Sec(String _locator)
         {
             String[] a = _locator.Split('#');
@@ -132,6 +157,7 @@ namespace TestProject.Framework
                    Assert.Fail;
             }
         }
+        
         
     }
 }
