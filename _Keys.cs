@@ -1,4 +1,4 @@
-﻿using OpenQA.Selenium;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using System;
 using System.Collections.Generic;
@@ -16,10 +16,9 @@ namespace TestProject.Framework
         {
             try
             {
-             dr    = new FirefoxDriver();
+            dr = new FirefoxDriver();
             dr.Navigate().GoToUrl(URL);
             Thread.Sleep(3000);
-            
             _Data.LogFile("Successfully launched the Browser with URL : " + URL);
             }
             catch(Exception e)
@@ -27,7 +26,7 @@ namespace TestProject.Framework
                 _Data.LogFile("Unable to launch the Browser");
                 Assert.Fail;
             }
-
+            
         }
 
         public static void TypeIn(String _locator,String Value)
@@ -77,6 +76,54 @@ namespace TestProject.Framework
                 if(dr.FindElement(By.XPath(XPATH)).Displayed)
                 {
                     _Data.LogFile("Verified the expected Element "+ Element);
+                }
+            }
+            catch(Exception e)
+            {
+                   _Data.LogFile("Expected Element is not found - "+ Element);
+                   Assert.Fail;
+            }
+        }
+        public static void _DefaultWaitTime_30Sec(String _locator)
+        {
+            String[] a = _locator.Split('#');
+            String XPATH = a[1];
+            String Element = a[0]; 
+            try
+            {
+                for(int i=0;i<30;i++)
+                {
+                    if(dr.FindElement(By.XPath(XPATH)).Displayed)
+                    {
+                        _Data.LogFile("Verified the expected Element "+ Element);
+                        break;
+                    }
+                    Thread.Sleep(1000);
+                }
+                
+            }
+            catch(Exception e)
+            {
+                   _Data.LogFile("Expected Element is not found - "+ Element);
+                   Assert.Fail;
+            }
+        }
+        public static void _WaitForElement(String _locator,int Second)
+        {
+            String[] a = _locator.Split('#');
+            String XPATH = a[1];
+            String Element = a[0];
+            int sec = Second*1000;
+            try
+            {
+                for(int i=0;i<sec;i++)
+                {
+                    if(dr.FindElement(By.XPath(XPATH)).Displayed)
+                    {
+                        _Data.LogFile("Verified the expected Element "+ Element);
+                        break;
+                    }
+                    Thread.Sleep(1000);
                 }
             }
             catch(Exception e)
