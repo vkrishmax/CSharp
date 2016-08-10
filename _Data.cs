@@ -59,7 +59,23 @@ public static String retrieve1(String Col)
             }
             return rowval;
         }
-
+        public void static Write_Excel(String Col)
+        {
+            String rowval = null;
+            XSSFSheet sh;
+            XSSFWorkbook wb;
+            String Flag = "false";
+            string path = CommonVariable.TESTDATA.Trim() + "Data.xlsx";
+            if (File.Exists(path))
+            {
+                wb = new XSSFWorkbook(path);
+                // create sheet
+                sh = (XSSFSheet)wb.GetSheet("Sheet1");
+                // 3 rows, 2 columns
+                int r = sh.LastRowNum;
+                (XSSFRow)sh.GetRow(j+2).GetCell(i).SetCellValue("");
+            }
+        }
 
         public static String retrieve(String Col)
         {
