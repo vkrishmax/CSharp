@@ -1,4 +1,3 @@
-﻿
 using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
@@ -23,7 +22,7 @@ namespace TestProject.Framework
          return val;
         }
 
-public static String retrieve1(String Col)
+        public static String retrieve1(String Col)
         {
             String rowval = null;
             XSSFSheet sh;
@@ -168,17 +167,6 @@ public static String retrieve1(String Col)
                 }
             }
             CommonVariable.CurTest = CommonVariable.TestName;
-
-            //log.WriteLine("Event Name:" + sEventName);
-
-            //log.WriteLine("Control Name:" + sControlName);
-
-            //log.WriteLine("Error Line No.:" + nErrorLineNo);
-
-            //log.WriteLine("Form Name:" + sFormName);
-
-            // Close the stream:
-
             log.Close();
 
         }
