@@ -36,24 +36,30 @@ namespace TestProject.Framework
                 sh = (XSSFSheet)wb.GetSheet("Sheet1");
                 // 3 rows, 2 columns
                 int r = sh.LastRowNum;
-                for (int j = 0; j <=r; j++)
+                for (int j = 0; j <=r; j+2)
                 {
                   XSSFRow row = (XSSFRow)sh.GetRow(j);
-                  int c = row.LastCellNum;
-                    for (int i = 0; i < c; i++)
+                  rowval = row.GetCell(0).StringCellValue.ToString();
+                    if(rowval.Equals(CommonVariable.TestName))
                     {
-                        rowval = row.GetCell(i).StringCellValue.ToString();
-                        if(rowval.equal(Col))
+                        int c = row.LastCellNum;
+                        for (int i = 0; i < c; i++)
                         {
-                            rowval = (XSSFRow)sh.GetRow(j+1).GetCell(i).StringCellValue.ToString();
-                            break;
-                            Flag = "true";
+                            XSSFRow row1 = (XSSFRow)sh.GetRow(j);
+                            rowval = row1.GetCell(i).StringCellValue.ToString();
+                            if(rowval.equal(Col))
+                            {
+                                XSSFRow row2 = (XSSFRow)sh.GetRow(j);
+                                rowval = row2.GetCell(i).StringCellValue.ToString();
+                                Flag = "true";
+                                break;    
+                            }
                         }
                     }
-                    if(Flag.equal("true"))
-                    {
-                        break;
-                    }
+                        if(Flag.equal("true"))
+                        {
+                            break;
+                        }
                 }
             }
             return rowval;
