@@ -64,7 +64,7 @@ namespace TestProject.Framework
             }
             return rowval;
         }
-        public void static Write_Excel(String Col)
+        public void static Write_Excel(String Description, String Status, String Comments)
         {
             String rowval = null;
             XSSFSheet sh;
@@ -78,7 +78,12 @@ namespace TestProject.Framework
                 sh = (XSSFSheet)wb.GetSheet("Sheet1");
                 // 3 rows, 2 columns
                 int r = sh.LastRowNum;
-                (XSSFRow)sh.GetRow(j+2).GetCell(i).SetCellValue("");
+                XSSFRow row = (XSSFRow)sh.GetRow(r+1);
+                row.GetCell(0).SetCellValue(DateTIME().toString());
+                row.GetCell(1).SetCellValue(CommonVariable.TestName);
+                row.GetCell(2).SetCellValue(Description);
+                row.GetCell(3).SetCellValue(Status);
+                row.GetCell(4).SetCellValue(Comments);
             }
         }
 
