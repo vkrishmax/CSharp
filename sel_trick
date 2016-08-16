@@ -1,0 +1,4 @@
+FirefoxProfile profile = new FirefoxProfile ();
+profile.setAcceptUntrustedCertificates (true);
+profile.setAssumeUntrustedCertificateIssuer (false); driver =
+new FirefoxDriver (profile); driver.manage ().window ().maximize();
