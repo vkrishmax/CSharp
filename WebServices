@@ -1,0 +1,116 @@
+Print
+Send HTTP Get Request With Network Credential C#
+
+When sending Http get request to a website, sometimes users need to submit network credentials. For how to send a Http get request, please review related articles in the site. This example below explains how to send a Http Get request with network credentials. 
+
+We can use NetworkCredential class in the System.Net namespace to send username, user password and domain information in the Http Get request. In your C# project, add a class named "HttpRequestUtilityAuthentication" and write the following code. 
+
+ 
+
+using System;
+using System.IO;
+using System.Net;
+
+namespace Com.Example.Csharp
+{
+    class HttpRequestUtilityAuthentication
+    {
+        public void GetRequest(String uri)
+        {
+            //Create a HTTP Web Request Instance
+            var httpWebRequest = (HttpWebRequest) WebRequest.Create(uri);
+            //Set the request type to Get
+            httpWebRequest.Method = "GET";
+            //Set Credential
+            String UserId = "someUserId";
+            String UserPassword = "somePassword";
+            String DomainName = "SomeDomain";
+            NetworkCredential networkCredential=new NetworkCredential(UserId,UserPassword,DomainName);
+            httpWebRequest.Credentials = networkCredential;
+            //Set the maximum redirection
+            httpWebRequest.MaximumAutomaticRedirections = 3;
+            //Set time out
+            httpWebRequest.Timeout = 5000;
+            Console.WriteLine("Sending HTTP Request");
+            //Create a HTTP Web Response Instance
+            var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
+            //Get the Response Stream
+            var responseStream = httpWebResponse.GetResponseStream();
+            if (responseStream != null)
+            {
+                //Read Response Stream Using Stream Reader
+                var streamReader=new StreamReader(responseStream);
+                Console.WriteLine("HTTP Response is: ");
+                Console.WriteLine(streamReader.ReadToEnd());
+            }
+            //Close Stream Response
+            if (responseStream != null) responseStream.Close();
+        }
+    }
+}
+
+You can call the method above and send Http get request to websites that require network credentials.
+
+Email
+Print
+Send HTTP Get Request C#
+
+This article explains how to send a HTTP Get request to a webpage or website using HttpWebRequest class in C#. In this example, we retrieve the response of HTTP get request to a website "http://demo.mahara.org". 
+
+1. Create a class named HttpRequestUtility in your c# project and write the following code. 
+
+using System;
+using System.IO;
+using System.Net;
+
+namespace Com.Example.Csharp
+{
+    class HttpRequestUtility
+    {
+        public void GetRequest(String uri)
+        {
+            //Create a HTTP Web Request Instance
+            var httpWebRequest = (HttpWebRequest) WebRequest.Create(uri);
+            //Set the request type to Get
+            httpWebRequest.Method = "GET";
+            //Set the maximum redirection
+            httpWebRequest.MaximumAutomaticRedirections = 3;
+            //Set time out
+            httpWebRequest.Timeout = 5000;
+            Console.WriteLine("Sending HTTP Request");
+            //Create a HTTP Web Response Instance
+            var httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
+            //Get the Response Stream
+            var responseStream = httpWebResponse.GetResponseStream();
+            if (responseStream != null)
+            {
+                //Read Response Stream Using Stream Reader
+                var streamReader=new StreamReader(responseStream);
+                Console.WriteLine("HTTP Response is: ");
+                Console.WriteLine(streamReader.ReadToEnd());
+            }
+            //Close Stream Response
+            if (responseStream != null) responseStream.Close();
+        }
+    }
+}
+Write the code below in the Main method of the Program class.
+
+using System;
+
+namespace Com.Example.Csharp
+{
+    class Program
+    {
+        private static void Main(string[] args)
+        {
+            //Get Http Response
+            HttpRequestUtility httpRequestUtility=new HttpRequestUtility();
+            httpRequestUtility.GetRequest("http://demo.mahara.org");
+            Console.ReadKey();
+        }
+    }
+}
+
+Run the Main method in the Program class and see the result on the console . You will see all the html response on the console.
+
