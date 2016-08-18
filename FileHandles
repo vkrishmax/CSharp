@@ -1,0 +1,343 @@
+Time-Stamping Test Case Results
+
+When writing test results to files or folders, you want to time-stamp folders or files so you can distinguish the results of different test runs. Using the DateTime.Now property in DateTime class, we can append time stamp info to a folder name or file name. This article explains how to implement time stamps. In this example,we create a file with a time stamp in the file name. 
+
+Step 1: in your .Net project, add a class file named "WriteAFile" and write the following codes. 
+
+ 
+using System;
+using System.IO;
+namespace Com.Example.Csharp
+{
+    class WriteAFile
+    {
+       public static void WriteToFile(String value, String filename,String fileExtention)
+        {
+            //opening txt file
+            var file = new FileStream(filename+"."+fileExtention, FileMode.OpenOrCreate);
+            var sw = new StreamWriter(file);
+            //writing to the file
+            sw.WriteLine(value);
+            //closing file
+            sw.Close();
+        }
+    }
+}
+Step 2: write the following code in the Main method of the Program file.
+
+using System;
+
+namespace Com.Example.Csharp
+{
+    class Program
+    {
+        private static void Main(string[] args)
+        {
+            //Create time stamp string
+            String timeStamp = DateTime.Now.ToString("s");
+            timeStamp = timeStamp.Replace(":", "_");
+            Console.WriteLine(timeStamp);
+            // Write a file with time stamp
+            WriteAFile.WriteToFile("This is a test for time stamp "+timeStamp,"Result"+timeStamp,".txt");
+            Console.ReadLine();
+        }
+    }
+}
+Step 3: run the Program above and see the result as shown below. A file is created with a time stamp in the file name. File content has the time stamp string.
+
+Result2015-07-20T22_30_41.txt
+This is a test for time stamp 2015-07-20T22_30_41
+Email
+Print
+TextReader Read Text File C#
+
+Using TextReader class, we can read contents of a text file. The TextReader class is an abstract class, so you do not instantiate in your code. The StreamReader class derives from TextReader and provides implementations of the member for reading from a Stream. In this example, we read a TestCase.txt file. The file has the following content. 
+
+ 
+
+[id]=00001
+[module]=Login
+[expected]=Users should be able to login with valid user name and password. Logout link should be displayed. 
+
+[id]=00002
+[module]=Logout
+[expected]=User should be redirected to login page after logging out. Login button should be displayed. 
+In your C# project, write the following code in the "TextReaderUtility.cs" class file.
+
+using System;
+using System.IO;
+using System.Text;
+
+namespace Com.Example.Csharp
+{
+    class TextReaderUtility
+    {
+        public void ReadTextFile(String fileName)
+        {
+           StringBuilder builder=new StringBuilder();
+            try
+            {
+
+                using (StreamReader reader = File.OpenText(fileName))
+                {
+                    string line;
+                    // Read and display lines from the file until the end of  
+                    // the file is reached. 
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        //Append each line to the String Builder
+                        builder.Append(line);
+                    }
+
+                    Console.WriteLine(builder.ToString());
+                }
+            }
+            catch (Exception e)
+            {
+                // Display information about what went wrong.
+                Console.WriteLine("The file could not be read:");
+                Console.WriteLine(e.Message);
+            }
+        }
+    }
+}
+Write the following code in the main method of the Program.cs class.
+
+using System;
+
+namespace Com.Example.Csharp
+{
+    class Program
+    {
+        private static void Main(string[] args)
+        {
+            //Read Text File with Stream Reader
+            TextReaderUtility textReaderUtility=new TextReaderUtility();
+            textReaderUtility.ReadTextFile("TestCases.txt");
+            Console.ReadKey();
+        }
+    }
+}
+Run the Main method in the Program.cs file and see the result below. The result is displayed on the console.
+
+[id]=00001[module]=Login[expected]=Users should be able to login with valid user
+ name and password. Logout link should be displayed. [id]=00002[module]=Logout[e
+xpected]=User should be redirected to login page after logging out. Login button
+ should be displayed.
+
+The console displayed the content of the TestCase.txt file. From the console output, you see that the file content format is not maintained when using TextReader and StringBuilder to read a text file. 
+
+Email
+Print
+StreamReader Read Text File C#
+
+Using StreamReader class in C#, users can read a text file. The example below uses an instance of StreamReader to read text from a file. A file "TestCases.txt" contains the following content. 
+
+[id]=00001
+[module]=Login
+[expected]=Users should be able to login with valid user name and password. Logout link should be displayed. 
+
+[id]=00002
+[module]=Logout
+[expected]=User should be redirected to login page after logging out. Login button should be displayed. 
+In your C# project, create a class "StreamReaderUtility.cs" and write the following code. 
+
+ 
+
+using System;
+using System.IO;
+
+namespace Com.Example.Csharp
+{
+    class StreamReaderUtility
+    {
+        public void ReadTextFile(String fileName)
+        {
+            try 
+        {
+            // Create an instance of StreamReader to read contents from a file. 
+            // The using statement also closes the StreamReader
+            using (StreamReader sr = new StreamReader(fileName)) 
+            {
+                string line;
+                // Read and display lines from the file until the end of  
+                // the file is reached. 
+                while ((line = sr.ReadLine()) != null) 
+                {
+                    Console.WriteLine(line);
+                }
+            }
+        }
+        catch (Exception e) 
+        {
+            // Display information about what went wrong.
+            Console.WriteLine("The file could not be read:");
+            Console.WriteLine(e.Message);
+        }
+    }
+        }
+    }
+Continue Reading
+
+Email
+Print
+Read Text File and File Info in CSharp
+
+In C#, using FileInfo and File classes, we can read a file meta data and read its text content. This example explains how to use FileInfo and File classes. 
+
+Write the following code in the class "FileUtility.cs"
+
+using System;
+using System.IO;
+
+namespace Com.Example.Csharp
+{
+    class FileUtility
+    {
+        public void GetFileInformation(String fileName)
+        {
+            FileInfo fileInfo=new FileInfo(fileName);
+            Console.WriteLine("File created time : {0}", fileInfo.CreationTime);
+            Console.WriteLine("File created UTC time : {0}", fileInfo.CreationTimeUtc);
+            Console.WriteLine("File full path is: "+fileInfo.FullName);
+            Console.WriteLine("File last write time {0}",fileInfo.LastWriteTime);
+            Console.WriteLine("File last write time UTC  " +fileInfo.LastWriteTimeUtc);
+            Console.WriteLine("File last access time {0} ",fileInfo.LastAccessTime);
+            Console.WriteLine("File last access time UTC  {0} ",fileInfo.LastWriteTimeUtc);
+        }
+
+        public void ReadFileContent(String fileName)
+        {
+            var content = File.ReadAllText(fileName);
+            Console.WriteLine(content);
+        }
+    }
+}
+Write the following code in the main Program file "Program.cs"
+
+using System;main
+
+namespace Com.Example.Csharp
+{
+    class Program
+    {
+        private static void Main(string[] args)
+        {
+            //Read file meta data
+            FileUtility fileUtility=new FileUtility();
+            fileUtility.GetFileInformation("test_txt.txt");
+            Console.ReadKey();
+            //Read file content
+            fileUtility.ReadFileContent("test_txt.txt");
+            Console.ReadKey();
+        }
+    }
+}
+Run the program and see the result displayed on the console output.
+
+File created time : 6/29/2015 9:48:04 PM
+File created UTC time : 6/30/2015 1:48:04 AM
+File full path is: C:\*************\bin\Debug\test_txt.txt
+File last write time 7/6/2015 8:47:46 PM
+File last write time UTC  7/7/2015 12:47:46 AM
+File last access time 6/29/2015 9:48:04 PM
+File last access time UTC  7/7/2015 12:47:46 AM
+This is a test
+This is a test
+Email
+Print
+Create a Directory in CSharp
+
+In C#, DirectoryInfo and Directory classes represent a folder on the file system. This example explains how to use these classes to create a directory with time stamp and rename directory if the directory exists. 
+
+using System;
+using System.IO;
+
+namespace Com.Example.Csharp
+{
+    class CreateFolder
+    {
+        static void Main(string[] args)
+        {
+            
+           //create folder
+            CreateFolder folder1=new CreateFolder();
+           folder1.CreateANewFolder("test","folder1");
+            
+            //create folder
+            CreateFolder folder2=new CreateFolder();
+           folder2.CreateANewFolder("test", "folder2");
+
+            //create folder and rename existing
+            CreateFolder folder3=new CreateFolder();
+            folder3.CreateANewFolderRenameExisting("test","folder");
+        }
+
+        public void CreateANewFolder(String folderPrefix, String folderSuffix)
+        {
+            //get current system data and time
+            DateTime currentDateTime = DateTime.Now;
+            //convert current system date and time to a string
+            string currentDataTimeString = currentDateTime.ToString("yyyy_MM_dd_hh_mm_ss_tt", System.Globalization.CultureInfo.InvariantCulture);
+            //create a new folder 
+            string newFolder = folderPrefix+"_" + currentDataTimeString+"_"+folderSuffix;
+            System.IO.Directory.CreateDirectory(newFolder);
+        }
+        public void CreateANewFolderRenameExisting(String folderPrefix, String folderSuffix)
+        {
+            //create a new folder 
+            string newFolder = folderPrefix + "_" + folderSuffix;
+            DirectoryInfo directoryInfo=new DirectoryInfo(newFolder);
+            if(!directoryInfo.Exists)
+            System.IO.Directory.CreateDirectory(newFolder);
+            else
+            {
+                directoryInfo.MoveTo(directoryInfo.FullName+"backup");
+                System.IO.Directory.CreateDirectory(newFolder);
+            }
+        }
+    }
+}
+Run the above code and see the results below. If you run the above code in "Debug" mode, you will see these folders in the bin\Debug folder.
+
+test_2015_07_06_08_22_32_PM_folder1
+test_2015_07_06_08_22_32_PM_folder2
+test_folder
+test_folderbackup
+Email
+Print
+Write To A File C#
+
+Using FileStream and StreamWriter class in System.IO namespace, users can create files and write contents.  See the example below. 
+
+ 
+using System;
+using System.IO;
+
+namespace Com.Example.Csharp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //write a txt file
+            WriteToFile("This is a test","test_txt","txt");
+            //write a csv file
+            WriteToFile("A,B,C,D","test_csv","csv");
+        }
+
+        public static void WriteToFile(String value, String filename,String fileExtention)
+        {
+            //opening txt file
+            var file = new FileStream(filename+"."+fileExtention, FileMode.OpenOrCreate);
+            var sw = new StreamWriter(file);
+
+            //writing to the file
+            sw.WriteLine(value);
+            //closing file
+            sw.Close();
+        }
+    }
+}
+
+Run the above code and check the created files "test_txt.txt" and "test_csv.csv".
