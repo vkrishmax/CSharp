@@ -1,0 +1,26 @@
+[TestClass]
+public class UnitTest1
+{
+[TestMethod]
+[Owner("XX")]
+[Priority(2)]
+[TestCategory(CI)]
+public void TestMethod1()
+{
+}
+[TestMethod]
+[TestProperty("Time","Long")]
+[TestCategory(CI)]
+public void TestMethod2()
+{
+}
+[TestMethod]
+[TestProperty("Time","Fast")]
+[TestCategory(CI)]
+public void TestMethod3()
+{
+}
+}
+
+
+
