@@ -1,0 +1,227 @@
+
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Windows.Input;
+using System.Windows.Forms;
+using System.Drawing;
+using Microsoft.VisualStudio.TestTools.UITesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UITest.Extension;
+using Keyboard = Microsoft.VisualStudio.TestTools.UITesting.Keyboard;
+using Microsoft.VisualStudio.TestTools.UITesting.HtmlControls;
+using System;
+using System.IO;
+using System.IO.Compression;
+using System.Linq;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+
+namespace Test_1
+{
+    /// <summary>
+    /// Summary description for CodedUITest1
+    /// </summary>
+    [CodedUITest]
+    public class TestCases
+    {
+        public TestCases()
+        {
+        }
+
+       // [TestMethod]
+        public void CodedUITestMethod1()
+        {
+            BrowserWindow browser = BrowserWindow.Launch(new System.Uri(" "));
+            Playback.Wait(5000);
+            this.UIMap.BrandLogo();
+            this.UIMap.UserID();
+            this.UIMap.login();
+            Playback.Wait(10000);
+            browser.SearchProperties.Add(BrowserWindow.PropertyNames.Name, "File Upload",
+            PropertyExpressionOperator.Contains);
+
+            browser.WindowTitles.Add("File Upload");
+            browser.WaitForControlExist();
+            browser.WaitForControlReady();
+            browser.SetFocus();
+
+            UITestControl a = new UITestControl(browser);
+            a.TechnologyName = "Web";
+            a.SearchProperties["Name"] = "filesctrl";
+            a.WindowTitles.Add("File Upload");
+            Mouse.Click(a);
+            this.UIMap.FileName();
+
+            Microsoft.VisualStudio.TestTools.UITesting.HtmlControls.HtmlDocument d = new Microsoft.VisualStudio.TestTools.UITesting.HtmlControls.HtmlDocument(browser);
+            d.TechnologyName = "Web";
+            d.SearchProperties["ControlType"] = "Document";
+            d.SearchProperties["Title"] = "File Upload";
+            d.WindowTitles.Add("File Upload");
+
+            HtmlTable t = new HtmlTable(d);
+            t.TechnologyName = "Web";
+            t.SearchProperties["Id"] = "list_records";
+            t.WindowTitles.Add("File Upload");
+
+            int r = t.RowCount;
+            int c = t.ColumnCount;
+
+
+
+            string val = t.GetCell(1, 0).InnerText;
+
+            UITestControl l = new UITestControl(d);
+            l.TechnologyName = "Web";
+            l.SearchProperties["InnerText"] = val.Trim();
+            l.SearchProperties["ControlDefinition"] = "onclick=\"return $.fn.fmatter.dynamicLink";
+            l.WindowTitles.Add("File Upload");
+            Mouse.Click(l);
+            Playback.Wait(10000);
+            //this.UIMap.SelectFile();
+
+
+        }
+        private static string directoryPath = @"C:\Users\ \Documents\visual studio 2015\Projects\Test_1\Test_1\fi";
+
+       // [TestMethod]
+        public void comp()
+        {
+
+
+            
+            DirectoryInfo directorySelected = new DirectoryInfo(directoryPath); 
+            foreach (FileInfo fileToDecompress in directorySelected.GetFiles("*.gz"))
+            {
+                Decompress(fileToDecompress);
+            }
+
+
+        }
+
+
+
+        [TestMethod]
+        public void m1()
+        {
+
+            StreamReader r1 = new StreamReader(@"C:\Users\ \Documents\visual studio 2015\Projects\Test_1\Test_1\d\ .json");
+            StreamReader r2 = new StreamReader(@"C:\Users\ \Documents\visual studio 2015\Projects\Test_1\Test_1\d\ .json");
+            string json1 = r1.ReadToEnd();
+            string json2 = r2.ReadToEnd();
+            string sourceJsonString = json1; //"{'name':'John Doe','age':'25','hitcount':34}";
+            string targetJsonString = json2;//"{'name':'John Doe','age':'26','hitcount':30}"; 
+            JObject sourceJObject = JsonConvert.DeserializeObject<JObject>(sourceJsonString);
+            JObject targetJObject = JsonConvert.DeserializeObject<JObject>(targetJsonString); 
+            if (!JToken.DeepEquals(sourceJObject, targetJObject))
+            {
+                foreach (KeyValuePair<string, JToken> sourceProperty in sourceJObject)
+                {
+                    JProperty targetProp = targetJObject.Property(sourceProperty.Key); 
+                    if (!JToken.DeepEquals(sourceProperty.Value, targetProp.Value))
+                    {
+                        Console.WriteLine(string.Format("{0} property value is changed", sourceProperty.Key));
+                    }
+                    else
+                    {
+                        Console.WriteLine(string.Format("{0} property value didn't change", sourceProperty.Key));
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Objects are same");
+            }
+        } 
+
+
+        public static void Decompress(FileInfo fileToDecompress)
+        {
+            using (FileStream originalFileStream = fileToDecompress.OpenRead())
+            {
+                string currentFileName = fileToDecompress.FullName;
+                string newFileName = currentFileName.Remove(currentFileName.Length - fileToDecompress.Extension.Length);
+
+                String[] a = newFileName.Split('\\');
+                int s = a.Length;
+                String v = a[s - 1];
+
+
+
+                using (FileStream decompressedFileStream = File.Create(@"C:\Users\ \Documents\visual studio 2015\Projects\Test_1\Test_1\d\"+v))
+                {
+                    using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
+                    {
+                        decompressionStream.CopyTo(decompressedFileStream);
+                        Console.WriteLine("Decompressed: {0}", fileToDecompress.Name);
+                    }
+                }
+            }
+        }
+
+
+
+
+
+        //string startPath = @"c:\example\start";
+        //string zipPath = @"c:\example\result.zip";
+        //string extractPath = @"c:\example\extract";
+
+        //ZipFile.CreateFromDirectory(startPath, zipPath);
+
+        //ZipFile.ExtractToDirectory(zipPath, extractPath);
+  
+
+
+        #region Additional test attributes
+
+        // You can use the following additional attributes as you write your tests:
+
+        ////Use TestInitialize to run code before running each test 
+        //[TestInitialize()]
+        //public void MyTestInitialize()
+        //{        
+        //    // To generate code for this test, select "Generate Code for Coded UI Test" from the shortcut menu and select one of the menu items.
+        //}
+
+        ////Use TestCleanup to run code after each test has run
+        //[TestCleanup()]
+        //public void MyTestCleanup()
+        //{        
+        //    // To generate code for this test, select "Generate Code for Coded UI Test" from the shortcut menu and select one of the menu items.
+        //}
+
+        #endregion
+
+        /// <summary>
+        ///Gets or sets the test context which provides
+        ///information about and functionality for the current test run.
+        ///</summary>
+        //public TestContext TestContext
+        //{
+        //    get
+        //    {
+        //        return testContextInstance;
+        //    }
+        //    set
+        //    {
+        //        testContextInstance = value;
+        //    }
+        //}
+        //private TestContext testContextInstance;
+
+        public UIMap UIMap
+        {
+            get
+            {
+                if ((this.map == null))
+                {
+                    this.map = new UIMap();
+                }
+
+                return this.map;
+            }
+        }
+
+        private UIMap map;
+    }
+}
