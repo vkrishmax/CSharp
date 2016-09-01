@@ -1,0 +1,28 @@
+ String connStr = "Data Source";
+          SqlCeConnection con = new SqlCeConnection(connStr);
+          try
+          {
+              Console.WriteLine("Try to connect the Server");
+              con.Open();  
+          }
+          catch (Exception e)
+          {
+              Console.WriteLine("Unable to connect");
+          }
+
+
+          String query = "";
+          try
+          {
+              SqlCeCommand com = new SqlCeCommand(query, con);
+              SqlCeDataReader data;
+              data = com.ExecuteReader();
+              while (data.Read())
+              {
+                  String val = data[""].ToString();
+              }
+          }
+          catch (Exception e)
+          {
+              Console.WriteLine("Unable to fetch the value");
+          }
