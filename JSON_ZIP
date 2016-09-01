@@ -98,7 +98,59 @@ namespace Test_1
 
         }
 
+   public static ArrayList JSON_Comp(String Expected,String Processed)
+        {
+            JV = new ArrayList();
+            StreamReader r1 = new StreamReader(Expected);
+            StreamReader r2 = new StreamReader(Processed);
+            string json1 = r1.ReadToEnd();
+            string json2 = r2.ReadToEnd();
+            string sourceJsonString = json1; //"{'name':'John Doe','age':'25','hitcount':34}";
+            string targetJsonString = json2;//"{'name':'John Doe','age':'26','hitcount':30}"; 
+            JObject sourceJObject = JsonConvert.DeserializeObject<JObject>(sourceJsonString);
+            JObject targetJObject = JsonConvert.DeserializeObject<JObject>(targetJsonString);
+            if (!JToken.DeepEquals(sourceJObject, targetJObject))
+            {
+                foreach (KeyValuePair<string, JToken> sourceProperty in sourceJObject)
+                {
+                    JProperty targetProp = targetJObject.Property(sourceProperty.Key);
+                    if (!JToken.DeepEquals(sourceProperty.Value, targetProp.Value))
+                    {
+                        String a = sourceProperty.Value.ToString();
+                        String[] z = a.Trim().Split(',');
+                        String q = targetProp.Value.ToString();
+                        String[] s = q.Trim().Split(',');
+                        for (int i=0;i<z.Length;i++)
+                        {
+                            String src = z[i].ToString().Trim();
+                            String ext = s[i].ToString().Trim();
+                            if(!src.Equals(ext))
+                            {
+                                String ss = sourceProperty.Key + "|" + src + "#" + ext;
+                                
+                                
+                               
+                                JV.Add(ss);
+                                Flag = "false";
+                            }
+                        }
+                       // Console.WriteLine(string.Format("{0} property value is changed", sourceProperty.Key));
+                    }
+                    else
+                    {
+                      //  Console.WriteLine(string.Format("{0} property value didn't change", sourceProperty.Key));
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Objects are same");
+            }
+           
 
+
+            return JV;
+        }
 
         [TestMethod]
         public void m1()
